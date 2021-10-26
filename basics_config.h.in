@@ -1,2 +1,7 @@
+#ifndef BASICS_CONFIG_H
+#define BASICS_CONFIG_H
+
 #define VERSION_MAJOR @basics_VERSION_MAJOR@
 #define VERSION_MINOR @basics_VERSION_MINOR@
+
+#endif // BASICS_CONFIG_H
