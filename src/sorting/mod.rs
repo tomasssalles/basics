@@ -1,3 +1,3 @@
-mod bubble_sort;
+mod bubblesort;
 
-pub use bubble_sort::*;
+pub use bubblesort::*;

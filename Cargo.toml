@@ -6,3 +6,4 @@ authors = ["Tom"]
 publish = false
 
 [dependencies]
+rand = "0.8.4"

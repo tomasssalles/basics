@@ -1,2 +1,2 @@
 # basics
-Textbook implementations of CS basics.
+Textbook implementations of CS basics in rust.
