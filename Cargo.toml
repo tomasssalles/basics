@@ -5,5 +5,5 @@ edition = "2021"
 authors = ["Tom"]
 publish = false
 
-[dependencies]
+[dev-dependencies]
 rand = "0.8.4"
