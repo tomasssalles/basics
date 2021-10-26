@@ -3,59 +3,6 @@ use rand::{Rng, thread_rng};
 
 use basics::sorting::bubblesort;
 
-fn check_sorted(arr: &[i32]) {
-    let n = arr.len();
-    if n < 2 { return; }
-
-    for i in 0 .. n - 1 {
-        assert!(
-            arr[i] <= arr[i+1],
-            "i={}, arr[i]={}, arr[i+1]={}, n={}", i, arr[i], arr[i+1], n
-        )
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn empty() {
-        check_sorted(&[]);
-    }
-
-    #[test]
-    fn singleton() {
-        check_sorted(&[-99]);
-    }
-
-    #[test]
-    fn sorted() {
-        check_sorted(&[1, 2]);
-        check_sorted(&[45, 500, 501, 1001]);
-        check_sorted(&[5, 5, 6, 6, 9, 9]);
-        check_sorted(&[0, 0, 0, 0, 0]);
-    }
-
-    #[test]
-    #[should_panic(expected = "i=0, arr[i]=4, arr[i+1]=3, n=2")]
-    fn unsorted_small() {
-        check_sorted(&[4, 3]);
-    }
-
-    #[test]
-    #[should_panic(expected = "i=2, arr[i]=4, arr[i+1]=3, n=7")]
-    fn unsorted_middle() {
-        check_sorted(&[-1, 3, 4, 3, 5, 6, 7]);
-    }
-
-    #[test]
-    #[should_panic(expected = "i=3, arr[i]=4, arr[i+1]=3, n=5")]
-    fn unsorted_end() {
-        check_sorted(&[-1, 0, 2, 4, 3]);
-    }
-}
-
 #[test]
 fn empty() {
     let mut arr = [];
@@ -128,4 +75,11 @@ fn unsorted_large() {
         bubblesort(&mut vec);
         assert_eq!(expected, vec);
     }
+}
+
+#[test]
+fn signature() {
+    let mut arr = [1, 5, 3];
+    let result = bubblesort(&mut arr);
+    assert_eq!((), result);
 }
