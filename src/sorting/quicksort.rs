@@ -1,1 +1,1 @@
-pub fn quicksort() {}
+pub fn quicksort(seq: &mut [i32]) {}

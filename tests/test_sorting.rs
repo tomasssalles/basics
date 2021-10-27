@@ -1,7 +1,7 @@
 use rand::distributions::{Distribution, Uniform};
 use rand::{Rng, thread_rng};
 
-use basics::sorting::bubblesort;
+use basics::sorting::{bubblesort, quicksort};
 
 trait Sorter {
     fn sort(&self, seq: &mut [i32]);
@@ -120,4 +120,17 @@ impl Sorter for Bubblesorter {
 #[test]
 fn test_bubblesort() {
     test_sorting_algo(Bubblesorter);
+}
+
+struct Quicksorter;
+
+impl Sorter for Quicksorter {
+    fn sort(&self, seq: &mut [i32]) {
+        return quicksort(seq);
+    }
+}
+
+#[test]
+fn test_quicksort() {
+    test_sorting_algo(Quicksorter);
 }
