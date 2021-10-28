@@ -1,5 +1,5 @@
 pub fn mergesort(seq: &mut [i32]) {
-    let mut buffer: Vec<i32> = vec![0; seq.len()];
+    let mut buffer: Vec<i32> = vec![0; seq.len() / 2];
     mergesort_with_buffer(seq, &mut buffer[..]);
 }
 
