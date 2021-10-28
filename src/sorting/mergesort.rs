@@ -1,17 +1,22 @@
 pub fn mergesort(seq: &mut [i32]) {
+    let mut buffer: Vec<i32> = vec![0; seq.len()];
+    mergesort_with_buffer(seq, &mut buffer[..]);
+}
+
+fn mergesort_with_buffer(seq: &mut [i32], buffer: &mut [i32]) {
     if seq.len() < 2 {
         return;
     }
 
     let split = seq.len() / 2;
-
-    mergesort(&mut seq[..split]);
-    mergesort(&mut seq[split..]);
-    merge(seq, split);
+    mergesort_with_buffer(&mut seq[..split], buffer);
+    mergesort_with_buffer(&mut seq[split..], buffer);
+    merge_fwd(seq, split, &mut buffer[..split]);
 }
 
-fn merge(seq: &mut [i32], split: usize) {
-    let buffer = seq[..split].to_vec();
+fn merge_fwd(seq: &mut [i32], split: usize, buffer: &mut [i32]) {
+    buffer.copy_from_slice(&seq[..split]);
+
     let mut write_idx = 0;
     let mut l_idx = 0;
     let mut r_idx = split;
