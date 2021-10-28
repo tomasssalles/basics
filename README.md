@@ -4,8 +4,8 @@ Textbook implementations of CS basics in rust.
 ## Sorting
 
 - [x] Bubblesort.
-- [ ] Quicksort.
-- [ ] Mergesort.
+- [x] Quicksort.
+- [x] Mergesort.
 - [ ] Mergesort with O(log(n)) extra space.
 - [ ] Heapsort.
 - [ ] Timsort.
