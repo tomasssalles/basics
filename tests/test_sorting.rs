@@ -1,13 +1,16 @@
 use rand::distributions::{Distribution, Uniform};
 use rand::{Rng, thread_rng};
 
-use basics::sorting::{bubblesort, quicksort};
+use basics::sorting::{
+    bubblesort,
+    quicksort,
+    mergesort,
+};
 
 trait Sorter {
     fn sort(&self, seq: &mut [i32]);
 }
 
-#[derive(Debug)]
 struct SortCase<'a> {
     seq: &'a [i32],
     expected: &'a [i32],
@@ -133,4 +136,17 @@ impl Sorter for Quicksorter {
 #[test]
 fn test_quicksort() {
     test_sorting_algo(Quicksorter);
+}
+
+struct Mergesorter;
+
+impl Sorter for Mergesorter {
+    fn sort(&self, seq: &mut [i32]) {
+        return mergesort(seq);
+    }
+}
+
+#[test]
+fn test_mergesort() {
+    test_sorting_algo(Mergesorter);
 }
