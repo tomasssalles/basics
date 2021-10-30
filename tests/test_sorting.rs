@@ -1,3 +1,5 @@
+use std::convert::TryInto;
+
 use rand::distributions::{Distribution, Uniform};
 use rand::{Rng, thread_rng};
 
@@ -5,6 +7,8 @@ use basics::sorting::{
     bubblesort,
     quicksort,
     mergesort,
+    mergesort2,
+    mergesort_bufferless,
 };
 
 trait Sorter {
@@ -15,6 +19,24 @@ struct SortCase<'a> {
     seq: &'a [i32],
     expected: &'a [i32],
     note: &'a str,
+}
+
+fn get_all_possibilities(len: u32, max_val: i32) -> Vec<Vec<i32>> {
+    if len == 0 {
+        return vec![vec![]]
+    }
+
+    let mut res: Vec<Vec<i32>> = Vec::with_capacity(i32::pow(max_val, len).try_into().unwrap());
+
+    for vec in get_all_possibilities(len-1, max_val) {
+		for i in 1..=max_val {
+			let mut vec_cp = vec.clone();
+			vec_cp.push(i);
+			res.push(vec_cp);
+		}
+	}
+
+    return res;
 }
 
 fn test_sorting_algo(sorter: impl Sorter) {
@@ -86,6 +108,22 @@ fn test_sorting_algo(sorter: impl Sorter) {
         },
     ];
 
+    let mut exaustive_cases: Vec<(Vec<i32>, Vec<i32>, String)> = Vec::new();
+
+    for len in 0..=5 {
+        for vec in get_all_possibilities(len, len.try_into().unwrap()) {
+            let mut vec_cp = vec.clone();
+            vec_cp.sort();
+            let note = format!("exaustive with len={}", len);
+
+            exaustive_cases.push((vec, vec_cp, note));
+        }
+    }
+
+    for (v, v_sorted, note) in &exaustive_cases {
+        cases.push(SortCase {seq: &v[..], expected: &v_sorted[..], note: &note});
+    }
+
     let mut rng = thread_rng();
     let len_range = Uniform::from(0 .. 4000);
     let nums_range = Uniform::from(-1000 .. 1000);
@@ -149,4 +187,30 @@ impl Sorter for Mergesorter {
 #[test]
 fn test_mergesort() {
     test_sorting_algo(Mergesorter);
+}
+
+struct Mergesorter2;
+
+impl Sorter for Mergesorter2 {
+    fn sort(&self, seq: &mut [i32]) {
+        return mergesort2(seq);
+    }
+}
+
+#[test]
+fn test_mergesort2() {
+    test_sorting_algo(Mergesorter2);
+}
+
+struct BufferlessMergesorter;
+
+impl Sorter for BufferlessMergesorter {
+    fn sort(&self, seq: &mut [i32]) {
+        return mergesort_bufferless(seq);
+    }
+}
+
+#[test]
+fn test_mergesort_bufferless() {
+    test_sorting_algo(BufferlessMergesorter);
 }
