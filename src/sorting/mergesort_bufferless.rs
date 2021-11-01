@@ -14,14 +14,14 @@ fn mergesort_even_bufferless(seq: &mut [i32]) {
         let mut i = 0;
 
         while i + (4*k) <= n {
-            sandwich_merge_bwd(&mut seq[i..(i+(2*k))], k, &mut seq[(i+(2*k))..(i+(3*k))]);
+            let (left_n_buff, right) = (&mut seq[i..(i+(3*k))]).split_at_mut(2*k);
+            sandwich_merge_bwd(left_n_buff, k, right);
             i += 4*k;
         }
 
         if i + (2*k) < n {
-            sandwich_merge_bwd(
-                &mut seq[i..(i+(2*k))], k, &mut seq[(i+(2*k))..(i+(2*k)+last_chunk))]
-            );
+            let (left_n_buff, right) = (&mut seq[i..(i+(2*k)+last_chunk)]).split_at_mut(2*k);
+            sandwich_merge_bwd(left_n_buff, k, right);
             last_chunk += k;
         } else if i == n {
             last_chunk = 2*k;
@@ -73,7 +73,7 @@ fn sandwich_merge_bwd(seq: &mut [i32], split: usize, right: &mut [i32]) {
     }
 
     // Note: r_idx == write_idx.
-    slice_swap_safe_left(left: &mut right[..(r_idx+1)], right: &mut seq[..(r_idx+1)]);
+    slice_swap_safe_left(&mut right[..(r_idx+1)], &mut seq[..(r_idx+1)]);
 }
 
 fn mergesort_with_safe_buffer(seq: &mut [i32], buffer: &mut [i32]) {
@@ -170,7 +170,7 @@ pub fn mergesort_bufferless(seq: &mut [i32]) {
 
     if n < 4 {
         // Tiny, constant size (1) buffer doesn't count.
-        mergesort_with_buffer(seq, &mut [0]);
+        mergesort_with_safe_buffer(seq, &mut [0]);
         return;
     }
 
@@ -179,7 +179,7 @@ pub fn mergesort_bufferless(seq: &mut [i32]) {
         1 => (n-1)/4,
         2 => (n+2)/4,
         3 => (n+1)/4,
-        _ => unreachable! -1,
+        _ => unreachable!(),
     };
 
     let l_split = n - (2*r);
@@ -188,5 +188,15 @@ pub fn mergesort_bufferless(seq: &mut [i32]) {
     // Note: l_split/2 <= r == (r_split - l_split) == (n - r_split)
     // and ((n - l_split) / 2) == r <= l_split.
 
-    // TODO
+    {
+        let (first_half, second_half) = seq.split_at_mut(l_split);
+        mergesort_with_safe_buffer(second_half, first_half);
+        mergesort_with_safe_buffer(first_half, &mut second_half[..r]);
+    }
+
+    let (three_quarters, fourth_quarter) = seq.split_at_mut(r_split);
+    sandwich_merge_bwd(three_quarters, l_split, fourth_quarter);
+    mergesort_with_safe_buffer(fourth_quarter, &mut three_quarters[l_split..]);
+    sandwich_merge_bwd(three_quarters, l_split, fourth_quarter);
+    mergesort_bufferless(fourth_quarter);
 }
