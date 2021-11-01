@@ -7,7 +7,6 @@ use basics::sorting::{
     bubblesort,
     quicksort,
     mergesort,
-    mergesort2,
     mergesort_bufferless,
 };
 
@@ -187,19 +186,6 @@ impl Sorter for Mergesorter {
 #[test]
 fn test_mergesort() {
     test_sorting_algo(Mergesorter);
-}
-
-struct Mergesorter2;
-
-impl Sorter for Mergesorter2 {
-    fn sort(&self, seq: &mut [i32]) {
-        return mergesort2(seq);
-    }
-}
-
-#[test]
-fn test_mergesort2() {
-    test_sorting_algo(Mergesorter2);
 }
 
 struct BufferlessMergesorter;
