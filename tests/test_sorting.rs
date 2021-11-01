@@ -8,6 +8,7 @@ use basics::sorting::{
     quicksort,
     mergesort,
     mergesort_bufferless,
+    heapsort,
 };
 
 trait Sorter {
@@ -199,4 +200,17 @@ impl Sorter for BufferlessMergesorter {
 #[test]
 fn test_mergesort_bufferless() {
     test_sorting_algo(BufferlessMergesorter);
+}
+
+struct Heapsorter;
+
+impl Sorter for Heapsorter {
+    fn sort(&self, seq: &mut [i32]) {
+        return heapsort(seq);
+    }
+}
+
+#[test]
+fn test_heapsort() {
+    test_sorting_algo(Heapsorter);
 }
