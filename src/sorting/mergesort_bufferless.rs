@@ -124,7 +124,13 @@ fn slice_swap_safe_left(left: &mut [i32], right: &mut [i32]) {
 
 pub fn mergesort_bufferless(seq: &mut [i32]) {
     // A variant of mergesort (or maybe more like a distant 2nd cousin) which uses
-    // only O(log(n)) additionally allocated space. The runtime is O(n*log(n)) as usual.
+    // only O(log(n)) additional space. The runtime is O(n*log(n)) as usual.
+    //
+    // There are other variants of mergesort that use O(log(n)) space, but I like this
+    // one because the proof of the asymptotic runtime is relatively simple. Still,
+    // this may not be the most efficient one. And, of course, heapsort also uses
+    // only O(log(n)) space.
+    //
     // The detailed algorithm is complicated, but here's a simplified explanation:
     //
     // 1. First we sort the second half of seq using the first half as a buffer.
