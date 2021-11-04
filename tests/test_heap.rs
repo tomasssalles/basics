@@ -1,7 +1,10 @@
 use rand::distributions::{Distribution, Uniform};
-use rand::thread_rng;
+use rand::{Rng, thread_rng};
 
-use basics::sorting::{max_heapify};
+use basics::sorting::{max_heapify, build_max_heap};
+
+mod helpers;
+use crate::helpers::get_all_possible_vectors;
 
 fn check_have_same_elements(l_seq: &[i32], r_seq: &[i32]) {
     let mut l_seq_cp = l_seq.to_vec();
@@ -79,7 +82,7 @@ mod tests {
 #[test]
 fn test_max_heapify_empty() {
     let mut seq: [i32; 0] = [];
-    max_heapify(&mut seq);
+    assert_eq!((), max_heapify(&mut seq));
 }
 
 #[test]
@@ -211,4 +214,65 @@ fn test_max_heapify_random() {
     }
 }
 
-// TODO: Test build_max_heap
+#[test]
+fn test_build_max_heap_empty() {
+    let mut seq: [i32; 0] = [];
+    assert_eq!((), build_max_heap(&mut seq));
+}
+
+#[test]
+fn test_build_max_heap_singleton() {
+    let mut seq = [42];
+    build_max_heap(&mut seq);
+    assert_eq!([42], seq);
+}
+
+#[test]
+fn test_build_max_heap_already_heap() {
+    let seqs = [
+        vec![42, 7],
+        vec![42, 7, 8],
+        vec![5, 4, 4],
+        vec![6, 6, 6, 6],
+        vec![9, 9, 3, 1, 2],
+        vec![9, 9, 3, 1, 2, 1, 2, 1],
+        vec![42, 3, 31, 2, 1, 25, 25, 1, 2, -1, -5, 23]
+    ];
+
+    for seq in seqs {
+        let mut seq_cp = seq.clone();
+        build_max_heap(&mut seq_cp);
+        assert_eq!(seq, seq_cp);
+    }
+}
+
+#[test]
+fn test_build_max_heap_len_leq_6() {
+    for len in 2..=6 {
+        for vec in get_all_possible_vectors(len, len.try_into().unwrap()) {
+            let mut vec_cp = vec.clone();
+            build_max_heap(&mut vec_cp);
+            check_have_same_elements(&vec, &vec_cp);
+            check_is_max_heap(&vec_cp);
+        }
+    }
+}
+
+fn get_random_vec() -> Vec<i32> { // Minimum length is 7
+    let mut rng = thread_rng();
+    let nums_range = Uniform::from(-1000 .. 1000);
+    let len = Uniform::from(7 .. 4000).sample(&mut rng);
+
+    return (&mut rng).sample_iter(nums_range).take(len).collect();
+}
+
+#[test]
+fn test_build_max_heap_random() {
+    for _ in 0..10 {
+        let vec = get_random_vec();
+        let mut vec_cp = vec.clone();
+        build_max_heap(&mut vec_cp);
+        check_have_same_elements(&vec, &vec_cp);
+        check_is_max_heap(&vec_cp);
+    }
+}
