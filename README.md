@@ -7,7 +7,10 @@ Textbook implementations of CS basics in rust.
 - [x] Quicksort.
 - [x] Mergesort.
 - [x] Mergesort with O(log(n)) extra space.
+- [ ] Max-Heap on array.
 - [x] Heapsort.
+- [ ] Binary search.
+- [ ] All-occurrences binary search.
 
 ## Graphs
 
