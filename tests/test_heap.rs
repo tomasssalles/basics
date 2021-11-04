@@ -210,3 +210,5 @@ fn test_max_heapify_random() {
         check_is_max_heap(&vec_cp);
     }
 }
+
+// TODO: Test build_max_heap
