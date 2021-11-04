@@ -1,0 +1,134 @@
+use basics::sorting::{max_heapify};
+
+fn check_have_same_elements(l_seq: &[i32], r_seq: &[i32]) {
+    let mut l_seq_cp = l_seq.to_vec();
+    let mut r_seq_cp = r_seq.to_vec();
+    l_seq_cp.sort();
+    r_seq_cp.sort();
+    assert_eq!(
+        l_seq_cp,
+        r_seq_cp,
+        "Sequences differ after sorting! Original:\nl_seq={:?},\nr_seq={:?}",
+        l_seq,
+        r_seq,
+    );
+}
+
+fn check_is_max_heap(seq: &[i32]) {
+    for i in 0..seq.len() { // Will return earlier
+        let l_child = (2*i)+1;
+
+        if l_child >= seq.len() {
+            return;
+        }
+
+        assert!(seq[i] >= seq[l_child], "i={}, l_child={}, seq={:?}", i, l_child, seq);
+
+        let r_child = l_child+1;
+
+        if r_child >= seq.len() {
+            return;
+        }
+
+        assert!(seq[i] >= seq[r_child], "i={}, r_child={}, seq={:?}", i, r_child, seq);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_max_heap_empty() {
+        check_is_max_heap(&[]);
+    }
+
+    #[test]
+    fn test_is_max_heap_singleton() {
+        check_is_max_heap(&[42]);
+    }
+
+    #[test]
+    fn test_is_max_heap_pair() {
+        check_is_max_heap(&[42, 41]);
+        check_is_max_heap(&[42, 42]);
+    }
+
+    #[test]
+    fn test_is_max_heap_triple() {
+        check_is_max_heap(&[42, 13, 14]);
+        check_is_max_heap(&[42, 13, 13]);
+        check_is_max_heap(&[42, 15, 14]);
+        check_is_max_heap(&[42, 42, 14]);
+        check_is_max_heap(&[42, 13, 42]);
+        check_is_max_heap(&[42, 42, 42]);
+    }
+
+    #[test]
+    fn test_is_max_heap_large() {
+        check_is_max_heap(&[5, 4, 3, 2, 1, 0]);
+        check_is_max_heap(&[5, 4, 4, 3, -1, 0, 4]);
+        check_is_max_heap(&[5, 4, 3, 3, 2, 2, 1, 0, -1, -2]);
+        check_is_max_heap(&[5, 0, 4, -2, -1, 1, 3, -5]);
+    }
+}
+
+#[test]
+fn test_max_heapify_empty() {
+    let mut seq: [i32; 0] = [];
+    max_heapify(&mut seq);
+}
+
+#[test]
+fn test_max_heapify_singleton() {
+    let mut seq = [42];
+    max_heapify(&mut seq);
+    assert_eq!(42, seq[0]);
+}
+
+#[test]
+fn test_max_heapify_already_heap() {
+    let seqs = [
+        vec![42, 7],
+        vec![42, 7, 8],
+        vec![5, 4, 4],
+        vec![6, 6, 6, 6],
+        vec![9, 9, 3, 1, 2],
+        vec![9, 9, 3, 1, 2, 1, 2, 1],
+        vec![42, 3, 31, 2, 1, 25, 25, 1, 2, -1, -5, 23]
+    ];
+
+    for seq in seqs {
+        let mut seq_cp = seq.clone();
+        max_heapify(&mut seq_cp);
+        assert_eq!(seq, seq_cp);
+    }
+}
+
+#[test]
+fn test_max_heapify_pair() {
+    let mut seq = [42, 43];
+    max_heapify(&mut seq);
+    assert_eq!([43, 42], seq);
+}
+
+#[test]
+fn test_max_heapify_depth_2() {
+    let seqs = [
+        vec![42, 43, 13],
+    ];
+
+    for seq in seqs {
+        let mut seq_cp = seq.clone();
+        max_heapify(&mut seq_cp);
+        check_have_same_elements(&seq, &seq_cp);
+        check_is_max_heap(&seq_cp);
+    }
+}
+
+// Multiple levels but goes down only a few
+// Multiple levels and goes down all the way
+// Not all nodes in a level have children
+// A node doesn't have all children
+// Not all leaves are on the same level
+// Random
