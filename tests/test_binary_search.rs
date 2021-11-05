@@ -43,15 +43,15 @@ fn test_binary_search_large_once() {
     assert_eq!(binary_search(&[-3, -2, -1, 0, 1, 42], 42), (5, 6));
 }
 
-// #[test]
-// fn test_binary_search_pair_repeated() {
-//     assert_eq!(binary_search(&[42, 42], 42), (0, 2));
-// }
+#[test]
+fn test_binary_search_pair_repeated() {
+    assert_eq!(binary_search(&[42, 42], 42), (0, 2));
+}
 
-// #[test]
-// fn test_binary_search_large_repeated() {
-//     assert_eq!(binary_search(&[42, 42, 42, 50, 51, 51, 60, 99], 42), (0, 3));
-//     assert_eq!(binary_search(&[7, 9, 42, 42, 42, 42, 43, 88, 99], 42), (2, 6));
-//     assert_eq!(binary_search(&[-3, -2, -1, 0, 1, 42, 42], 42), (5, 7));
-//     assert_eq!(binary_search(&[42, 42, 42, 42, 42, 42, 42], 42), (0, 7));
-// }
+#[test]
+fn test_binary_search_large_repeated() {
+    assert_eq!(binary_search(&[42, 42, 42, 50, 51, 51, 60, 99], 42), (0, 3));
+    assert_eq!(binary_search(&[7, 9, 42, 42, 42, 42, 43, 88, 99], 42), (2, 6));
+    assert_eq!(binary_search(&[-3, -2, -1, 0, 1, 42, 42], 42), (5, 7));
+    assert_eq!(binary_search(&[42, 42, 42, 42, 42, 42, 42], 42), (0, 7));
+}
