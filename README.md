@@ -14,7 +14,9 @@ Textbook implementations of CS basics in rust.
 ## ML
 
 ### Neural networks
-(Not a generic implementation, but rather tailor-made for digit classification.)
+Just a toy implementation sufficient to tackle the MNIST database. The data
+files are assumed to be in {project-root}/resources (which is git-ignored),
+unzipped.
 
 - [ ] Fetch training/test data.
 - [ ] NN data structure.
@@ -25,4 +27,5 @@ Textbook implementations of CS basics in rust.
 - [ ] Back-propagation.
 - [ ] Gradient descent.
 - [ ] Training.
+- [ ] Usage of GPU?
 - [ ] Analysis.
